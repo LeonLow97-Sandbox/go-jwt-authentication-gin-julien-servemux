@@ -7,3 +7,7 @@
 
 - Find out how to redirect to "/" or "/login" if cookie is not found.
 - In github.com/golang-jwt/jwt/v4 StandardClaims type is deprecated, you should replace StandardClaims with RegisteredClaims.
+
+## ServeMux
+
+- `Content-Type: application/json` indicates that the request body format is JSON

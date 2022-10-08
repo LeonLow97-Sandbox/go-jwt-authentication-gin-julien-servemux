@@ -62,7 +62,7 @@ func Login(c *gin.Context) {
 	}
 
 	// Creating a Cookie with the Token (maxAge = 3600 = 1 hour)
-	c.SetCookie("jwt", token, 3600, "/", "localhost", false, true)
+	c.SetCookie("jwt-gin", token, 3600, "/", "localhost", false, true)
 	
 	c.JSON(http.StatusOK, gin.H{
 		"code": http.StatusOK,
@@ -75,7 +75,7 @@ func Logout (c *gin.Context) {
 	fmt.Println("Retrieved Issuer using c.GetString() in Logout Route:", c.GetString("username"))
 
 	// Eliminates the cookie with maxAge = -1
-	c.SetCookie("jwt", "", -1, "", "", false, true)
+	c.SetCookie("jwt-gin", "", -1, "", "", false, true)
 	c.JSON(http.StatusOK, gin.H{
 		"code": http.StatusOK,
 		"message": "Successfully Logged Out!",
@@ -85,7 +85,7 @@ func Logout (c *gin.Context) {
 // Retrieve the Issuer from Cookie
 func RetrieveIssuer(c *gin.Context) {
 	// Returns existing cookie
-	cookie, err := c.Cookie("jwt")
+	cookie, err := c.Cookie("jwt-gin")
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusBadRequest,
 			gin.H{"code": http.StatusBadRequest, "message": "Invalid Credentials"})
