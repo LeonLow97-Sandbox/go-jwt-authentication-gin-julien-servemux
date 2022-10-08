@@ -54,6 +54,18 @@ func Login(c *gin.Context) {
 		ExpiresAt: jwt.NewNumericDate(tokenExpireTime),	
 	})
 
+	// Generate Token with Claims AND Subclaims
+	// tokenExpireTime := time.Now().Add(1 * time.Hour) // 1 hour expiry time from now
+	// claims := &jwt.MapClaims {
+	// 	"Issuer": dbUsername,
+	// 	"Expiry": tokenExpireTime,
+	// 	"data": map[string]string {
+	// 		"firstname": "Jie Wei",
+	// 		"lastname": "Low",
+	// 	},
+	// }
+	// generateToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+
 	// Used to validate that the token is trustworthy and has not been tampered with a secret key (usually stored in .env)
 	token, err := generateToken.SignedString([]byte(SecretKey))
 	if err != nil {
@@ -103,10 +115,22 @@ func RetrieveIssuer(c *gin.Context) {
 
 	// To access the issuer, we need it to be type RegisteredClaims
 	claims := token.Claims.(*jwt.RegisteredClaims)
-
 	// Retrieve issuer from Claims
 	// and Set issue as "username" to access in backend
 	fmt.Println("Retrieved Issuer using claims.Issuer:", claims.Issuer)
 	c.Set("username", claims.Issuer)
 	fmt.Println("Retrieved Issuer using c.GetString():" , c.GetString("username"))
+
+	// Retrieve issuer, fullname and lastname from Claims and Subclaims
+	// token, _ := jwt.Parse(cookie, func(token *jwt.Token) (interface{}, error) {
+	// 	return []byte(SecretKey), nil
+	// })
+	// claims := token.Claims.(jwt.MapClaims)
+	// fmt.Println(`Retrieved Issuer using claims["Issuer"]:`, claims["Issuer"])
+	// c.Set("username", claims["Issuer"])
+
+	// data := claims["data"].(map[string]interface{})
+	// firstname := data["firstname"].(string)
+	// lastname := data["lastname"].(string)
+	// fmt.Println("Retrieved Subclaims firstname and lastname:", firstname, lastname)
 }
